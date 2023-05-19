@@ -11,7 +11,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		new SpringApplicationBuilder(Main.class)//
-				.web(WebApplicationType.NONE)//
+				.web(WebApplicationType.NONE)// newer Spring versions
 				.run(args);
 	}
 
