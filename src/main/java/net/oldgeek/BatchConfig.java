@@ -45,6 +45,7 @@ public class BatchConfig {
 
 	@Bean
 	@StepScope
+	//TODO, why if returned ItemReader<String>, error: Reader must be open before it can be read.
 	FlatFileItemReader<String> itemReader(@Value("#{jobParameters[file_path]}") String filePath) {
 		FlatFileItemReader<String> reader = new FlatFileItemReader<String>();
 		final FileSystemResource fileResource = new FileSystemResource(filePath);

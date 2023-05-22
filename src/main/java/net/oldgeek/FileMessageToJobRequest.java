@@ -1,7 +1,6 @@
 package net.oldgeek;
 
 import java.io.File;
-import java.util.Date;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParametersBuilder;
@@ -29,12 +28,10 @@ public class FileMessageToJobRequest {
 		JobParametersBuilder jobParametersBuilder = new JobParametersBuilder();
 
 		jobParametersBuilder.addString(fileParameterName, message.getPayload().getAbsolutePath());
-		// TODO: I do not know hot fix this yet, but not supposed to 
-		// have to add a dummy value to make job params unique, or else spring batch
-		// will only run it the first time
-		// Suppose there must be some default we need to change to allow multiple jobs executions with the same parameters
-		jobParametersBuilder.addDate("timestamp", new Date());
-
+		// to force importing files existing in the folder at each poll (even if they were imported before)
+		//jobParametersBuilder.addDate("timestamp", new Date());
+		// Warning currently the integration does not remove the source file, and as such default behavior, only first time, seems plausible 
+		
 		return new JobLaunchRequest(job, jobParametersBuilder.toJobParameters());
 	}
 }
