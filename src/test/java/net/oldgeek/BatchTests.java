@@ -1,27 +1,26 @@
 package net.oldgeek;
 
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.test.JobLauncherTestUtils;
+import org.springframework.batch.test.context.SpringBatchTest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
 @ActiveProfiles("test")
-@SpringBootTest(classes = { TestConfig.class, BatchConfig.class })
+@EnableAutoConfiguration // auto-configure jobRepository and dataSource, since Spring Boot Test 3: fix No bean named 'dataSource' available
+@SpringBootTest(classes = BatchConfig.class ) // initialize SampleJob
+@SpringBatchTest // auto-configure JobLauncherTestUtils
 public class BatchTests {
 
-	@Autowired
-	private JobLauncherTestUtils jobLauncherTestUtils;
-
 	@Test
-	public void testSampleJob() throws Exception {
+	public void testSampleJob(@Autowired JobLauncherTestUtils jobLauncherTestUtils) throws Exception {
 		JobParametersBuilder jobParametersBuilder = new JobParametersBuilder();
 		jobParametersBuilder.addString("file_path", "src/test/resources/sample.txt");
 
